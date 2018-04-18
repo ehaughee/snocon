@@ -6,10 +6,11 @@ Collated snow condition information dashboard.
 
 #### Proposed tools
 - [ReactJS](http://facebook.github.io/react/)
-- [Redux](https://redux.js.org/)
+- [Redux](https://redux.js.org/) - later
 - [Semantic UI](http://semantic-ui.com/)
-- [WebPack](https://webpack.js.org/)
-- [Jest](https://facebook.github.io/jest/)
+- [Sass](https://sass-lang.com/)
+- [WebPack](https://webpack.js.org/) - obscured by `create-react-app`
+- [Jest](https://facebook.github.io/jest/) - later
 
 
 #### Setup instructions
