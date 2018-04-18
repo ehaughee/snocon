@@ -13,4 +13,7 @@ Collated snow condition information dashboard.
 
 
 #### Setup instructions
-1. TODO
+1. Clone the repo
+1. `yarn install`
+1. `yarn start`
+1. I think...
