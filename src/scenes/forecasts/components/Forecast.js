@@ -54,7 +54,7 @@ class Forecast extends Component {
             Loading...
           </Loader>
         </Dimmer>
-        <Header dividing size="huge">
+        <Header className="location-header" dividing size="huge">
           {this.props.name}
         </Header>
         {this.state.forecasts.map(this.createEntry)}
