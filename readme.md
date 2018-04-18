@@ -10,7 +10,7 @@ Collated snow condition information dashboard.
 - [Semantic UI](http://semantic-ui.com/)
 - [WebPack](https://webpack.js.org/)
 - [Jest](https://facebook.github.io/jest/)
- 
+
 
 #### Setup instructions
 1. TODO
