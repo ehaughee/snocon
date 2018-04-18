@@ -4,30 +4,73 @@ import './Forecast.css';
 // Semantic UI Components
 import { Item, Dimmer, Loader, Header } from 'semantic-ui-react'
 
+let convert = require('convert-units');
+let moment = require('moment')
+
 class Forecast extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       loading: true,
+      gridpoint: {
+        updated: '',
+        elevation: '',
+      },
       forecasts: [],
     }
   }
 
   componentDidMount() {
-    this.getForecast(this.props.point);
+    this.getPointData(this.props.point);
   }
 
-  getForecast(point) {
+  getPointData(point) {
+    const pointUrl = `https://api.weather.gov/points/${point.lat},${point.lon}`;
+    fetch(pointUrl).then((response) => {
+      return response.json();
+    }).then((data) => {
+      const gridPoint = {
+        cwa: data.properties.cwa,
+        x: data.properties.gridX,
+        y: data.properties.gridY,
+      };
+
+      this.getForecast(gridPoint);
+      this.getGridData(gridPoint);
+    });
+  }
+
+  getForecast(gridPoint) {
     // TODO: extract this url
-    const apiUrl = `https://api.weather.gov/points/${point.lat},${point.lon}/forecast`;
-    fetch(apiUrl).then(function(response) {
+    const forecastUrl =
+      `https://api.weather.gov/gridpoints/${gridPoint.cwa}/${gridPoint.x},${gridPoint.y}/forecast`;
+
+    fetch(forecastUrl).then((response) => {
       return response.json();
     }).then((data) => {
       this.setState({
         loading: false,
         forecasts: data.properties.periods,
       });
+    });
+  }
+
+  getGridData(gridPoint) {
+    const gridpointUrl =
+      `https://api.weather.gov/gridpoints/${gridPoint.cwa}/${gridPoint.x},${gridPoint.y}`;
+
+    fetch(gridpointUrl).then((response) => {
+      return response.json();
+    }).then((data) => {
+      const updated = moment(data.properties.updateTime).format('MMM Do hh:mm a');
+      const elevation = `${convert(data.properties.elevation.value).from('m').to('ft').toFixed(0)} ft`;
+      this.setState({
+        gridpoint: {
+          updated: updated,
+          elevation: elevation,
+        },
+      })
     });
   }
 
@@ -57,7 +100,12 @@ class Forecast extends Component {
         <Header className="location-header" dividing size="huge">
           {this.props.name}
         </Header>
-        {this.state.forecasts.map(this.createEntry)}
+        <div>Last Updated: {this.state.gridpoint.updated}</div>
+        <div>Elevation: {this.state.gridpoint.elevation}</div>
+        {/* TODO: Extract this to its own component */}
+        <Item.Group className="forecast-entries">
+          {this.state.forecasts.map(this.createEntry)}
+        </Item.Group>
       </React.Fragment>
     );
   }

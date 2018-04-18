@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './ForecastList.css';
 
 // Semantic UI Components
-import { Item, Segment } from 'semantic-ui-react'
+import { Segment } from 'semantic-ui-react'
 
 // Components
 import Forecast from './Forecast';
@@ -41,10 +41,8 @@ class ForecastList extends Component {
 
   createLocation(props) {
     return (
-      <Segment key={props.name} className="location-segment">
-        <Item.Group>
-          <Forecast name={props.name} {...props} />
-        </Item.Group>
+      <Segment key={props.name}>
+        <Forecast name={props.name} {...props} />
       </Segment>
     );
   }
