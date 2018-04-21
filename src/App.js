@@ -7,6 +7,7 @@ import { Container } from 'semantic-ui-react'
 
 // Components
 import Forecasts from './scenes/forecasts';
+// import FutureTemperatureGraph from './graphs/FutureTemperatureGraph';
 
 class App extends Component {
   render() {

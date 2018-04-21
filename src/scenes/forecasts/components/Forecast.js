@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import './Forecast.css';
+import FutureTemperatureGraph from '../../../graphs/FutureTemperatureGraph';
 
 // Semantic UI Components
 import { Item, Dimmer, Loader, Header } from 'semantic-ui-react'
 
 let convert = require('convert-units');
-let moment = require('moment')
+let moment = require('moment');
 
 class Forecast extends Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class Forecast extends Component {
     this.state = {
       loading: true,
       gridpoint: {
+        temperatures: [],
         updated: '',
         elevation: '',
       },
@@ -67,6 +69,7 @@ class Forecast extends Component {
       const elevation = `${convert(data.properties.elevation.value).from('m').to('ft').toFixed(0)} ft`;
       this.setState({
         gridpoint: {
+          temperatures: data.properties.temperature.values,
           updated: updated,
           elevation: elevation,
         },
@@ -89,6 +92,18 @@ class Forecast extends Component {
     );
   }
 
+  renderFutureTempGraph() {
+    if (this.state.gridpoint.temperatures.length > 0) {
+      return (
+        <div style={{height: '250px'}}>
+          <FutureTemperatureGraph temperatures={this.state.gridpoint.temperatures} />
+        </div>
+      );
+    } else {
+      return '';
+    }
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -100,6 +115,7 @@ class Forecast extends Component {
         <Header className="location-header" dividing size="huge">
           {this.props.name}
         </Header>
+        {this.renderFutureTempGraph()}
         <div>Last Updated: {this.state.gridpoint.updated}</div>
         <div>Elevation: {this.state.gridpoint.elevation}</div>
         {/* TODO: Extract this to its own component */}
