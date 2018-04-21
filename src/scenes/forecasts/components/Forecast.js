@@ -16,7 +16,7 @@ class Forecast extends Component {
     super(props);
 
     this.state = {
-      activeIndex: -1,
+      activeIndices: new Set(),
       loading: true,
       gridpoint: {
         snowLevels: [],
@@ -133,10 +133,15 @@ class Forecast extends Component {
 
   handleAccClick = (e, titleProps) => {
     const { index } = titleProps;
-    const { activeIndex } = this.state;
-    const newIndex = activeIndex === index ? -1 : index;
+    let activeIndices = new Set(this.state.activeIndices);
 
-    this.setState({ activeIndex: newIndex });
+    if (activeIndices.has(index)) {
+      activeIndices.delete(index);
+    } else {
+      activeIndices.add(index);
+    }
+
+    this.setState({ activeIndices: activeIndices });
   }
 
   render() {
@@ -150,7 +155,7 @@ class Forecast extends Component {
 
         <Header className="location-header" dividing size="huge">
           {this.props.name}
-          <Label>
+          <Label title="Last updated">
             <Icon name='time' /> {this.state.gridpoint.updated}
           </Label>
         </Header>
@@ -160,18 +165,18 @@ class Forecast extends Component {
         </div>
 
         <Accordion>
-          <Accordion.Title active={this.state.activeIndex === 0} index={0} onClick={this.handleAccClick}>
+          <Accordion.Title active={this.state.activeIndices.has(0)} index={0} onClick={this.handleAccClick}>
             <Icon name='dropdown' />
             Future Temperature Graph
           </Accordion.Title>
-          <Accordion.Content active={this.state.activeIndex === 0}>
+          <Accordion.Content active={this.state.activeIndices.has(0)}>
             {this.renderFutureTempGraph()}
           </Accordion.Content>
-          <Accordion.Title active={this.state.activeIndex === 1} index={1} onClick={this.handleAccClick}>
+          <Accordion.Title active={this.state.activeIndices.has(1)} index={1} onClick={this.handleAccClick}>
             <Icon name='dropdown' />
             Future Snow Level Graph
           </Accordion.Title>
-          <Accordion.Content active={this.state.activeIndex === 1}>
+          <Accordion.Content active={this.state.activeIndices.has(1)}>
             {this.renderFutureSnowLevelGraph()}
           </Accordion.Content>
         </Accordion>
