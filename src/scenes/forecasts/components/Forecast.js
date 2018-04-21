@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './Forecast.css';
 
 // Semantic UI Components
-import { Item, Dimmer, Loader, Header } from 'semantic-ui-react'
+import { Item, Dimmer, Loader, Header, Accordion, Icon, Label } from 'semantic-ui-react'
 
 // Graph Components
 import FutureTemperatureGraph from '../../../graphs/FutureTemperatureGraph';
@@ -16,6 +16,7 @@ class Forecast extends Component {
     super(props);
 
     this.state = {
+      activeIndex: -1,
       loading: true,
       gridpoint: {
         snowLevels: [],
@@ -48,7 +49,7 @@ class Forecast extends Component {
   }
 
   getForecast(gridPoint) {
-    // TODO: extract this url
+    // TODO: extract this URL
     const forecastUrl =
       `https://api.weather.gov/gridpoints/${gridPoint.cwa}/${gridPoint.x},${gridPoint.y}/forecast`;
 
@@ -63,6 +64,7 @@ class Forecast extends Component {
   }
 
   getGridData(gridPoint) {
+    // TODO: Extract this URL
     const gridpointUrl =
       `https://api.weather.gov/gridpoints/${gridPoint.cwa}/${gridPoint.x},${gridPoint.y}`;
 
@@ -88,7 +90,14 @@ class Forecast extends Component {
       <Item key={props.number}>
         <Item.Image size='tiny' src={props.icon} />
         <Item.Content>
-          <Item.Header as='h3'>{props.name}</Item.Header>
+          <Item.Header as='h3'>
+            {props.name}
+            <Label>
+              <Icon name='thermometer half' />
+              {`${props.temperature} ${props.temperatureUnit}`}
+              {props.temperatureTrend ? ` and ${props.temperatureTrend}` : ''}
+            </Label>
+          </Item.Header>
           <Item.Meta>{props.shortForecast}</Item.Meta>
           <Item.Description>
             {props.detailedForecast}
@@ -106,7 +115,7 @@ class Forecast extends Component {
         </div>
       );
     } else {
-      return '';
+      return 'No data loaded yet';
     }
   }
 
@@ -122,6 +131,14 @@ class Forecast extends Component {
     }
   }
 
+  handleAccClick = (e, titleProps) => {
+    const { index } = titleProps;
+    const { activeIndex } = this.state;
+    const newIndex = activeIndex === index ? -1 : index;
+
+    this.setState({ activeIndex: newIndex });
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -130,13 +147,35 @@ class Forecast extends Component {
             Loading...
           </Loader>
         </Dimmer>
+
         <Header className="location-header" dividing size="huge">
           {this.props.name}
+          <Label>
+            <Icon name='time' /> {this.state.gridpoint.updated}
+          </Label>
         </Header>
-        {this.renderFutureTempGraph()}
-        {this.renderFutureSnowLevelGraph()}
-        <div>Last Updated: {this.state.gridpoint.updated}</div>
-        <div>Elevation: {this.state.gridpoint.elevation}</div>
+
+        <div>
+          <strong>Elevation:</strong> {this.state.gridpoint.elevation}
+        </div>
+
+        <Accordion>
+          <Accordion.Title active={this.state.activeIndex === 0} index={0} onClick={this.handleAccClick}>
+            <Icon name='dropdown' />
+            Future Temperature Graph
+          </Accordion.Title>
+          <Accordion.Content active={this.state.activeIndex === 0}>
+            {this.renderFutureTempGraph()}
+          </Accordion.Content>
+          <Accordion.Title active={this.state.activeIndex === 1} index={1} onClick={this.handleAccClick}>
+            <Icon name='dropdown' />
+            Future Snow Level Graph
+          </Accordion.Title>
+          <Accordion.Content active={this.state.activeIndex === 1}>
+            {this.renderFutureSnowLevelGraph()}
+          </Accordion.Content>
+        </Accordion>
+
         {/* TODO: Extract this to its own component */}
         <Item.Group className="forecast-entries">
           {this.state.forecasts.map(this.createEntry)}

@@ -3,7 +3,6 @@ import { Line } from 'react-chartjs-2';
 
 let convert = require('convert-units');
 let moment = require('moment');
-let annotation = require('chartjs-plugin-annotation');
 
 class FutureSnowLevelGraph extends Component {
   constructor(props) {
