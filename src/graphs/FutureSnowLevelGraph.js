@@ -3,6 +3,7 @@ import { Line } from 'react-chartjs-2';
 
 let convert = require('convert-units');
 let moment = require('moment');
+let annotation = require('chartjs-plugin-annotation');
 
 class FutureSnowLevelGraph extends Component {
   constructor(props) {
@@ -28,7 +29,6 @@ class FutureSnowLevelGraph extends Component {
             backgroundColor: lightBlueColor,
             borderWidth: 2,
             borderColor: 'black',
-            // pointBackgroundColor: lightBlueColor,
             pointBorderColor: lightBlueColor,
             data: levels,
           },
@@ -39,6 +39,19 @@ class FutureSnowLevelGraph extends Component {
     this.options = {
       responsive: true,
       maintainAspectRatio: false,
+      plugins: [annotation],
+      annotation: {
+        annotations: [
+          {
+            type: 'line',
+            mode: 'horizontal',
+            scaleID: 'y-axis-0',
+            value: this.props.elevation,
+            borderColor: 'red',
+            borderWidth: 1,
+          },
+        ],
+      },
     };
   }
 

@@ -29,7 +29,6 @@ class FutureTemperatureGraph extends Component {
             backgroundColor: lightBlueColor,
             borderWidth: 2,
             borderColor: 'black',
-            // pointBackgroundColor: lightBlueColor,
             pointBorderColor: lightBlueColor,
             data: temps,
           },

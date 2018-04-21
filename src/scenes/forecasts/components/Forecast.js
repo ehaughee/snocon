@@ -71,9 +71,8 @@ class Forecast extends Component {
     fetch(gridpointUrl).then((response) => {
       return response.json();
     }).then((data) => {
-      // TODO: Process closer to rendering
-      const updated = moment(data.properties.updateTime).format('MMM Do hh:mm a');
-      const elevation = `${convert(data.properties.elevation.value).from('m').to('ft').toFixed(0)} ft`;
+      const updated = moment(data.properties.updateTime);
+      const elevation = convert(data.properties.elevation.value).from('m').to('ft').toFixed(0);
       this.setState({
         gridpoint: {
           snowLevels: data.properties.snowLevel.values,
@@ -123,7 +122,10 @@ class Forecast extends Component {
     if (this.state.gridpoint.snowLevels.length > 0) {
       return (
         <div style={{height: '250px'}}>
-          <FutureSnowLevelGraph snowLevels={this.state.gridpoint.snowLevels} />
+          <FutureSnowLevelGraph
+            snowLevels={this.state.gridpoint.snowLevels}
+            elevation={this.state.gridpoint.elevation}
+          />
         </div>
       );
     } else {
@@ -156,12 +158,13 @@ class Forecast extends Component {
         <Header className="location-header" dividing size="huge">
           {this.props.name}
           <Label title="Last updated">
-            <Icon name='time' /> {this.state.gridpoint.updated}
+            <Icon name='time' />
+            {this.state.gridpoint.updated ? this.state.gridpoint.updated.format('MMM Do hh:mm a') : ''}
           </Label>
         </Header>
 
         <div>
-          <strong>Elevation:</strong> {this.state.gridpoint.elevation}
+          <strong>Elevation:</strong> {this.state.gridpoint.elevation} ft
         </div>
 
         <Accordion>
