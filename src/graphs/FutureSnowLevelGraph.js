@@ -5,16 +5,16 @@ let convert = require('convert-units');
 let moment = require('moment');
 let annotation = require('chartjs-plugin-annotation');
 
-class FutureTemperatureGraph extends Component {
+class FutureSnowLevelGraph extends Component {
   constructor(props) {
     super(props);
 
-    const dates = this.props.temperatures.map(({validTime, value}) => {
+    const dates = this.props.snowLevels.map(({validTime, value}) => {
       return moment(validTime.match(/(.*?)\//)[1]).format('HH:mm MMM DD');
     });
 
-    const temps = this.props.temperatures.map(({validTime, value}) => {
-      return convert(value).from('C').to('F').toFixed(0);
+    const levels = this.props.snowLevels.map(({validTime, value}) => {
+      return convert(value).from('m').to('ft').toFixed(0);
     });
 
     const lightBlueColor = 'rgb(66, 134, 244)';
@@ -24,14 +24,14 @@ class FutureTemperatureGraph extends Component {
         labels: dates,
         datasets: [
           {
-            label: 'Temp (F)',
+            label: 'Snow Level (ft)',
             fill: false,
             backgroundColor: lightBlueColor,
             borderWidth: 2,
             borderColor: 'black',
             // pointBackgroundColor: lightBlueColor,
             pointBorderColor: lightBlueColor,
-            data: temps,
+            data: levels,
           },
         ],
       },
@@ -40,19 +40,6 @@ class FutureTemperatureGraph extends Component {
     this.options = {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: [annotation],
-      annotation: {
-        annotations: [
-          {
-            type: 'line',
-            mode: 'horizontal',
-            scaleID: 'y-axis-0',
-            value: 32,
-            borderColor: 'red',
-            borderWidth: 1,
-          },
-        ],
-      },
     };
   }
 
@@ -63,4 +50,4 @@ class FutureTemperatureGraph extends Component {
   }
 }
 
-export default FutureTemperatureGraph;
+export default FutureSnowLevelGraph;

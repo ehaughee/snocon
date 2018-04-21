@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import './Forecast.css';
-import FutureTemperatureGraph from '../../../graphs/FutureTemperatureGraph';
 
 // Semantic UI Components
 import { Item, Dimmer, Loader, Header } from 'semantic-ui-react'
+
+// Graph Components
+import FutureTemperatureGraph from '../../../graphs/FutureTemperatureGraph';
+import FutureSnowLevelGraph from '../../../graphs/FutureSnowLevelGraph';
 
 let convert = require('convert-units');
 let moment = require('moment');
@@ -15,6 +18,7 @@ class Forecast extends Component {
     this.state = {
       loading: true,
       gridpoint: {
+        snowLevels: [],
         temperatures: [],
         updated: '',
         elevation: '',
@@ -65,10 +69,12 @@ class Forecast extends Component {
     fetch(gridpointUrl).then((response) => {
       return response.json();
     }).then((data) => {
+      // TODO: Process closer to rendering
       const updated = moment(data.properties.updateTime).format('MMM Do hh:mm a');
       const elevation = `${convert(data.properties.elevation.value).from('m').to('ft').toFixed(0)} ft`;
       this.setState({
         gridpoint: {
+          snowLevels: data.properties.snowLevel.values,
           temperatures: data.properties.temperature.values,
           updated: updated,
           elevation: elevation,
@@ -104,6 +110,18 @@ class Forecast extends Component {
     }
   }
 
+  renderFutureSnowLevelGraph() {
+    if (this.state.gridpoint.snowLevels.length > 0) {
+      return (
+        <div style={{height: '250px'}}>
+          <FutureSnowLevelGraph snowLevels={this.state.gridpoint.snowLevels} />
+        </div>
+      );
+    } else {
+      return '';
+    }
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -116,6 +134,7 @@ class Forecast extends Component {
           {this.props.name}
         </Header>
         {this.renderFutureTempGraph()}
+        {this.renderFutureSnowLevelGraph()}
         <div>Last Updated: {this.state.gridpoint.updated}</div>
         <div>Elevation: {this.state.gridpoint.elevation}</div>
         {/* TODO: Extract this to its own component */}
