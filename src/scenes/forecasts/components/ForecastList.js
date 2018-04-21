@@ -34,7 +34,14 @@ class ForecastList extends Component {
             lat: '48.858',
             lon: '-121.6697',
           }
-        }
+        },
+        {
+          name: 'Snoqualmie 👎🏻',
+          point: {
+            lat: '47.4587',
+            lon: '-121.4165',
+          },
+        },
       ]
     };
   }

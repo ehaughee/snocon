@@ -7,6 +7,7 @@ import { Item, Dimmer, Loader, Header, Accordion, Icon, Label } from 'semantic-u
 // Graph Components
 import FutureTemperatureGraph from '../../../graphs/FutureTemperatureGraph';
 import FutureSnowLevelGraph from '../../../graphs/FutureSnowLevelGraph';
+import FutureSnowFallGraph from '../../../graphs/FutureSnowFallGraph';
 
 let convert = require('convert-units');
 let moment = require('moment');
@@ -20,6 +21,7 @@ class Forecast extends Component {
       loading: true,
       gridpoint: {
         snowLevels: [],
+        snowfallAmounts: [],
         temperatures: [],
         updated: '',
         elevation: '',
@@ -76,6 +78,7 @@ class Forecast extends Component {
       this.setState({
         gridpoint: {
           snowLevels: data.properties.snowLevel.values,
+          snowfallAmounts: data.properties.snowfallAmount.values,
           temperatures: data.properties.temperature.values,
           updated: updated,
           elevation: elevation,
@@ -114,7 +117,7 @@ class Forecast extends Component {
         </div>
       );
     } else {
-      return 'No data loaded yet';
+      return 'No data...';
     }
   }
 
@@ -129,8 +132,52 @@ class Forecast extends Component {
         </div>
       );
     } else {
-      return '';
+      return 'No data...';
     }
+  }
+
+  renderFutureSnowFallGraph() {
+    if (this.state.gridpoint.snowfallAmounts.length > 0) {
+      return (
+        <div style={{height: '250px'}}>
+          <FutureSnowFallGraph
+            snowfallAmounts={this.state.gridpoint.snowfallAmounts}
+          />
+        </div>
+      );
+    } else {
+      return 'No data...';
+    }
+  }
+
+  renderGraphs() {
+    return (
+      <Accordion>
+        <Accordion.Title active={this.state.activeIndices.has(0)} index={0} onClick={this.handleAccClick}>
+          <Icon name='dropdown' />
+          Future Temperature Graph
+        </Accordion.Title>
+        <Accordion.Content active={this.state.activeIndices.has(0)}>
+          {this.renderFutureTempGraph()}
+        </Accordion.Content>
+
+        <Accordion.Title active={this.state.activeIndices.has(1)} index={1} onClick={this.handleAccClick}>
+          <Icon name='dropdown' />
+          Future Snow Level Graph
+        </Accordion.Title>
+        <Accordion.Content active={this.state.activeIndices.has(1)}>
+          {this.renderFutureSnowLevelGraph()}
+        </Accordion.Content>
+
+        <Accordion.Title active={this.state.activeIndices.has(2)} index={2} onClick={this.handleAccClick}>
+          <Icon name='dropdown' />
+          Future Snow Fall Graph
+        </Accordion.Title>
+        <Accordion.Content active={this.state.activeIndices.has(2)}>
+          {this.renderFutureSnowFallGraph()}
+        </Accordion.Content>
+      </Accordion>
+    );
   }
 
   handleAccClick = (e, titleProps) => {
@@ -167,22 +214,7 @@ class Forecast extends Component {
           <strong>Elevation:</strong> {this.state.gridpoint.elevation} ft
         </div>
 
-        <Accordion>
-          <Accordion.Title active={this.state.activeIndices.has(0)} index={0} onClick={this.handleAccClick}>
-            <Icon name='dropdown' />
-            Future Temperature Graph
-          </Accordion.Title>
-          <Accordion.Content active={this.state.activeIndices.has(0)}>
-            {this.renderFutureTempGraph()}
-          </Accordion.Content>
-          <Accordion.Title active={this.state.activeIndices.has(1)} index={1} onClick={this.handleAccClick}>
-            <Icon name='dropdown' />
-            Future Snow Level Graph
-          </Accordion.Title>
-          <Accordion.Content active={this.state.activeIndices.has(1)}>
-            {this.renderFutureSnowLevelGraph()}
-          </Accordion.Content>
-        </Accordion>
+        {this.renderGraphs()}
 
         {/* TODO: Extract this to its own component */}
         <Item.Group className="forecast-entries">

@@ -10,7 +10,7 @@ class FutureSnowLevelGraph extends Component {
     super(props);
 
     const dates = this.props.snowLevels.map(({validTime, value}) => {
-      return moment(validTime.match(/(.*?)\//)[1]).format('HH:mm MMM DD');
+      return moment(validTime.match(/(.*?)\//)[1]).format('HH:mm dd MMM DD');
     });
 
     const levels = this.props.snowLevels.map(({validTime, value}) => {
