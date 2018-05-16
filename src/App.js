@@ -3,7 +3,7 @@ import 'semantic-ui-css/semantic.min.css';
 import './App.css';
 
 // Semantic UI
-import { Container } from 'semantic-ui-react'
+import { Container, Grid } from 'semantic-ui-react'
 
 // Components
 import Forecasts from './scenes/forecasts';
@@ -14,8 +14,16 @@ class App extends Component {
   render() {
     return (
       <Container>
-        <Map/>
-        <Forecasts />
+        <Grid>
+          <Grid.Row>
+            <Grid.Column width={8}>
+              <Map/>
+            </Grid.Column>
+            <Grid.Column width={8}>
+              <Forecasts />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </Container>
     );
   }

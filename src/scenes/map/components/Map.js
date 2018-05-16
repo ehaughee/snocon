@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
-// Semantic UI Components
-import { Segment } from 'semantic-ui-react';
-
 mapboxgl.accessToken = 'pk.eyJ1IjoicGdyaW4iLCJhIjoiY2pnejJmdGkwMDY5ejMzcm9razFna2RjaSJ9.j_ypt2eyRhZ4TXyu7oGDzQ';
 
 class Map extends Component {
