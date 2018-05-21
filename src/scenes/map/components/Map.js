@@ -25,6 +25,8 @@ class Map extends Component {
       zoom
     });
 
+    this.addMarkers(map, this.props.locations);
+
     map.on('move', () => {
       const { lng, lat } = map.getCenter();
 
@@ -36,7 +38,14 @@ class Map extends Component {
     });
   }
 
-
+  addMarkers(map, locations) {
+    for (var i = 0; i < locations.length; i++) {
+      new mapboxgl.Marker()
+        .setLngLat([locations[i].point.lon,
+                   locations[i].point.lat])
+        .addTo(map);
+    }
+  }
 
   render() {
     const { lng, lat, zoom } = this.state;
