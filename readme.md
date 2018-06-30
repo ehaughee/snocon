@@ -12,6 +12,9 @@ Collated snow condition information dashboard.
 - [WebPack](https://webpack.js.org/) - obscured by `create-react-app`
 - [Jest](https://facebook.github.io/jest/) - later
 
+#### Ugly demo
+- https://snocon.herokuapp.com
+
 
 #### Setup instructions
 1. Clone the repo
