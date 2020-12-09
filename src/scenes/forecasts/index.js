@@ -6,7 +6,9 @@ import ForecastList from './components/ForecastList';
 class Forecasts extends Component {
   render() {
     return (
-      <ForecastList />
+      <ForecastList
+        onFocus={this.props.onFocus}
+      />
     );
   }
 }

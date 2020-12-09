@@ -9,8 +9,9 @@ import FutureTemperatureGraph from '../../../graphs/FutureTemperatureGraph';
 import FutureSnowLevelGraph from '../../../graphs/FutureSnowLevelGraph';
 import FutureSnowFallGraph from '../../../graphs/FutureSnowFallGraph';
 
-let convert = require('convert-units');
-let moment = require('moment');
+const convert = require('convert-units');
+const moment = require('moment');
+const config = require('../../../config/config.json');
 
 class Forecast extends Component {
   constructor(props) {
@@ -180,7 +181,7 @@ class Forecast extends Component {
     );
   }
 
-  handleAccClick = (e, titleProps) => {
+  handleAccClick = (_e, titleProps) => {
     const { index } = titleProps;
     let activeIndices = new Set(this.state.activeIndices);
 
@@ -191,7 +192,17 @@ class Forecast extends Component {
     }
 
     this.setState({ activeIndices: activeIndices });
-  }
+  };
+
+  handleLocateClick = (_e, labelProps) => {
+    const location = config.locations.find(loc => loc.id === labelProps.locationId);
+    const { lat, lon } = location.point;
+    this.props.onFocus({
+      lat,
+      lng: lon,
+      zoom: location.focus.zoom
+    });
+  };
 
   render() {
     return (
@@ -207,6 +218,15 @@ class Forecast extends Component {
           <Label title="Last updated">
             <Icon name='time' />
             {this.state.gridpoint.updated ? this.state.gridpoint.updated.format('MMM Do hh:mm a') : ''}
+          </Label>
+          <Label
+            as="a"
+            color='blue'
+            onClick={this.handleLocateClick}
+            locationId={this.props.id}
+          >
+            <Icon name="location arrow" />
+            Locate on map
           </Label>
         </Header>
 

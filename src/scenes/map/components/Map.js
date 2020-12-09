@@ -5,13 +5,12 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
 class Map extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      lng: -121,
-      lat: 47.5,
-      zoom: 8
+      lng: this.props.focus.lng || -121,
+      lat: this.props.focus.lat || 47.5,
+      zoom: this.props.focus.zoom || 8,
     };
   }
 
@@ -20,8 +19,8 @@ class Map extends Component {
 
     const map = new mapboxgl.Map({
       container: this.mapContainer,
-      style: 'mapbox://styles/mapbox/streets-v9',
-      center: [lng, lat],
+      style: 'mapbox://styles/mapbox/outdoors-v11',
+      center: [ lng, lat ],
       zoom
     });
 
@@ -36,13 +35,26 @@ class Map extends Component {
         zoom: map.getZoom().toFixed(2)
       });
     });
+    this.map = map;
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.focus.lat != prevProps.focus.lat ||
+        this.props.focus.lng != prevProps.focus.lng ||
+        this.props.focus.zoom != prevProps.focus.zoom) {
+      this.map.jumpTo({
+        center: [ this.props.focus.lng, this.props.focus.lat],
+        zoom: this.props.focus.zoom,
+      });
+    }
   }
 
   addMarkers(map, locations) {
     for (var i = 0; i < locations.length; i++) {
-      new mapboxgl.Marker()
+      new mapboxgl.Popup({ closeOnClick: false, closeButton: false })
         .setLngLat([locations[i].point.lon,
                    locations[i].point.lat])
+        .setHTML(locations[i].name)
         .addTo(map);
     }
   }

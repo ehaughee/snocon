@@ -1,31 +1,47 @@
 {
     "locations": [
         {
+            "id": "da1ffb0d-1e4c-4e55-b92b-baa8062b3eb8",
             "name": "Crystal Mountain",
             "point": {
                 "lat": "46.9388",
                 "lon": "-121.4731"
+            },
+            "focus": {
+                "zoom": 13
             }
         },
         {
+            "id": "1cb8dc69-d53f-4940-996d-3c995c92113b",
             "name": "Stevens Pass",
             "point": {
                 "lat": "47.7456",
                 "lon": "-121.0892"
+            },
+            "focus": {
+                "zoom": 13
             }
         },
         {
+            "id": "eda7ac59-34b7-4f41-ab24-219b3be982e7",
             "name": "Mt Baker",
             "point": {
                 "lat": "48.858",
                 "lon": "-121.6697"
+            },
+            "focus": {
+                "zoom": 13
             }
         },
         {
+            "id": "65e84d91-2779-4529-8605-35c41455b98f",
             "name": "Snoqualmie 👎🏻",
             "point": {
                 "lat": "47.4587",
                 "lon": "-121.4165"
+            },
+            "focus": {
+                "zoom": 13
             }
         }
     ]

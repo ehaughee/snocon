@@ -18,10 +18,14 @@ class ForecastList extends Component {
     };
   }
 
-  createLocation(props) {
+  createLocation = (location) => {
     return (
-      <Segment key={props.name}>
-        <Forecast name={props.name} {...props} />
+      <Segment key={location.name}>
+        <Forecast
+          name={location.name}
+          onFocus={this.props.onFocus}
+          {...location}
+        />
       </Segment>
     );
   }
